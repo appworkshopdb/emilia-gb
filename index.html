@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Für Emilia 💙</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4f8ff;
+    --ink:#16244a;
+    --blue:#2b5cd9;
+    --blue-deep:#1c3fa0;
+    --blue-soft:#dce8ff;
+    --gold:#f5b942;
+    --white:#ffffff;
+    --radius:22px;
+    --shadow:0 10px 30px rgba(28,63,160,.14);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;}
+  body{
+    font-family:'Nunito',system-ui,sans-serif;
+    background:
+      radial-gradient(circle at 15% 10%, #e3edff 0%, transparent 45%),
+      radial-gradient(circle at 90% 85%, #e8f0ff 0%, transparent 40%),
+      var(--bg);
+    color:var(--ink);
+    min-height:100%;
+    line-height:1.6;
+  }
+  h1,h2,h3{font-family:'Fraunces',serif;line-height:1.15;font-weight:700;}
+
+  .view{display:none;max-width:640px;margin:0 auto;padding:28px 20px 80px;animation:fadeIn .45s ease;}
+  .view.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important;}
+  }
+
+  .back{
+    display:inline-flex;align-items:center;gap:6px;
+    background:none;border:none;color:var(--blue);font:inherit;font-weight:700;
+    cursor:pointer;padding:8px 0;margin-bottom:8px;font-size:1rem;
+  }
+  .back:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:8px;}
+
+  /* ---------- Menü ---------- */
+  .hero{text-align:center;padding:26px 0 10px;}
+  .hero .balloons{font-size:2.4rem;letter-spacing:.2em;}
+  .hero h1{font-size:clamp(2rem,8vw,2.9rem);margin:10px 0 4px;color:var(--blue-deep);}
+  .hero h1 em{font-style:italic;font-weight:500;}
+  .hero p{color:#4a5a85;max-width:34ch;margin:0 auto;}
+
+  .tiles{display:grid;gap:14px;margin-top:26px;}
+  .tile{
+    display:flex;align-items:center;gap:16px;text-align:left;
+    background:var(--white);border:2px solid var(--blue-soft);border-radius:var(--radius);
+    padding:18px 20px;cursor:pointer;font:inherit;color:inherit;width:100%;
+    box-shadow:var(--shadow);transition:transform .15s ease,border-color .15s ease;
+  }
+  .tile:active{transform:scale(.98);}
+  .tile:hover{border-color:var(--blue);}
+  .tile .emoji{font-size:1.9rem;flex-shrink:0;}
+  .tile .t-name{font-family:'Fraunces',serif;font-weight:600;font-size:1.15rem;display:block;}
+  .tile .t-sub{font-size:.86rem;color:#61719b;}
+  .tile .check{margin-left:auto;font-size:1.3rem;color:var(--blue);visibility:hidden;}
+  .tile.done .check{visibility:visible;}
+  .tile.locked{opacity:.55;cursor:not-allowed;background:#eef2fb;}
+  .tile.locked.unlocked{
+    opacity:1;cursor:pointer;background:linear-gradient(135deg,#2b5cd9,#1c3fa0);
+    color:#fff;border-color:transparent;
+  }
+  .tile.locked.unlocked .t-sub{color:#cdddff;}
+  .progress-hint{text-align:center;font-size:.9rem;color:#61719b;margin-top:16px;}
+
+  /* ---------- Stationen allgemein ---------- */
+  .card{
+    background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);
+    padding:26px 22px;margin-top:14px;
+  }
+  .station-head h2{font-size:1.7rem;color:var(--blue-deep);}
+  .station-head p{color:#4a5a85;margin-top:4px;}
+  .btn{
+    display:inline-block;background:var(--blue);color:#fff;border:none;border-radius:14px;
+    font:inherit;font-weight:800;font-size:1.05rem;padding:14px 26px;cursor:pointer;
+    transition:transform .12s ease,background .15s ease;
+  }
+  .btn:hover{background:var(--blue-deep);}
+  .btn:active{transform:scale(.97);}
+  .btn.ghost{background:var(--blue-soft);color:var(--blue-deep);}
+
+  /* ---------- Escape Room ---------- */
+  .er-step{display:none;}
+  .er-step.active{display:block;animation:fadeIn .35s ease;}
+  .locks{display:flex;gap:10px;justify-content:center;font-size:1.6rem;margin:10px 0 18px;}
+  .locks span{filter:grayscale(1);opacity:.45;transition:all .3s;}
+  .locks span.open{filter:none;opacity:1;transform:scale(1.15);}
+  .q{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:600;margin-bottom:14px;}
+  .opts{display:grid;gap:10px;}
+  .opt{
+    background:var(--blue-soft);border:2px solid transparent;border-radius:14px;
+    padding:13px 16px;font:inherit;font-weight:700;color:var(--blue-deep);
+    cursor:pointer;text-align:left;transition:all .15s;
+  }
+  .opt:hover{border-color:var(--blue);}
+  .opt.wrong{background:#ffe3e3;color:#a33;animation:shake .4s;}
+  .opt.right{background:#d9f5df;color:#1c7a3a;border-color:#1c7a3a;}
+  @keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-7px);}75%{transform:translateX(7px);}}
+  .sass{min-height:1.6em;color:#c05555;font-weight:700;margin-top:12px;font-size:.95rem;}
+  .codepad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:260px;margin:16px auto;}
+  .codepad button{
+    background:var(--white);border:2px solid var(--blue-soft);border-radius:14px;
+    font:inherit;font-size:1.3rem;font-weight:800;padding:14px 0;cursor:pointer;color:var(--blue-deep);
+  }
+  .codepad button:active{background:var(--blue-soft);}
+  .code-display{
+    text-align:center;font-family:'Fraunces',serif;font-size:2rem;letter-spacing:.4em;
+    background:var(--ink);color:var(--gold);border-radius:14px;padding:10px 0 10px .4em;
+    max-width:260px;margin:0 auto;min-height:1.5em;
+  }
+  .hint{text-align:center;color:#61719b;font-size:.9rem;margin-top:10px;}
+
+  /* ---------- Frecher Button ---------- */
+  .arena{
+    position:relative;height:340px;background:var(--white);border-radius:var(--radius);
+    box-shadow:var(--shadow);margin-top:16px;overflow:hidden;
+    border:2px dashed var(--blue-soft);
+  }
+  .arena .btn{position:absolute;transition:none;}
+  #richtigBtn{left:18%;top:42%;}
+  #jaBtn{left:58%;top:42%;}
+  .arena-msg{text-align:center;margin-top:14px;min-height:1.8em;font-weight:700;color:var(--blue-deep);}
+
+  /* ---------- Rubbellos ---------- */
+  .rub-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px;}
+  .rub-card{
+    position:relative;aspect-ratio:3/4;border-radius:14px;overflow:hidden;
+    box-shadow:var(--shadow);background:var(--white);
+  }
+  .rub-card .content{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    padding:8px;text-align:center;
+  }
+  .rub-card .content img{width:100%;height:100%;object-fit:cover;border-radius:10px;}
+  .rub-card .voucher{
+    font-family:'Fraunces',serif;font-weight:700;color:var(--blue-deep);
+    background:linear-gradient(160deg,#fff6df,#ffe9b3);
+    width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:6px;border-radius:10px;font-size:clamp(.72rem,2.6vw,.95rem);padding:6px;
+  }
+  .rub-card .voucher .v-icon{font-size:1.6rem;}
+  .rub-card canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;transition:opacity .5s;}
+  .rub-card.revealed canvas{opacity:0;pointer-events:none;}
+  .rub-count{text-align:center;margin-top:14px;font-weight:700;color:#61719b;}
+
+  /* ---------- Geschenk ---------- */
+  .gift-stage{text-align:center;padding:30px 0 10px;}
+  .gift{
+    font-size:7rem;cursor:pointer;display:inline-block;user-select:none;
+    transition:transform .15s ease;
+  }
+  .gift:active{transform:scale(.92);}
+  .gift.wiggle{animation:wiggle .5s ease;}
+  @keyframes wiggle{0%,100%{transform:rotate(0);}20%{transform:rotate(-8deg);}50%{transform:rotate(8deg);}80%{transform:rotate(-4deg);}}
+  .gift-msg{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:600;color:var(--blue-deep);min-height:2.2em;margin-top:14px;}
+  .gift-reveal{display:none;margin-top:10px;}
+  .gift-reveal.show{display:block;animation:fadeIn .6s ease;}
+  .gift-reveal img{width:100%;max-width:420px;border-radius:var(--radius);box-shadow:var(--shadow);}
+
+  /* ---------- Finale ---------- */
+  #finale{position:relative;}
+  .finale-head{text-align:center;padding-top:10px;}
+  .finale-head .big{font-size:clamp(2rem,9vw,3rem);color:var(--blue-deep);}
+  .finale-head .sub{font-family:'Fraunces',serif;font-style:italic;font-size:1.2rem;color:var(--blue);margin-top:4px;}
+  .letter{
+    background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);
+    padding:30px 26px;margin-top:22px;font-size:1.04rem;
+  }
+  .letter p{margin-bottom:16px;}
+  .letter p:last-child{margin-bottom:0;}
+  .letter .sig{font-family:'Fraunces',serif;font-size:1.25rem;font-weight:600;color:var(--blue-deep);}
+  .finale-photo{margin-top:22px;text-align:center;}
+  .finale-photo img{width:100%;max-width:440px;border-radius:var(--radius);box-shadow:var(--shadow);transform:rotate(-1.5deg);}
+  #confetti{position:fixed;inset:0;pointer-events:none;z-index:50;}
+</style>
+</head>
+<body>
+
+<canvas id="confetti"></canvas>
+
+<!-- ================= MENÜ ================= -->
+<section class="view active" id="menu">
+  <div class="hero">
+    <div class="balloons">🎈🎂🎈</div>
+    <h1>Alles Gute, <em>Emilia!</em></h1>
+    <p>Bevor es deinen Geburtstagsgruß gibt, musst du dir den erstmal verdienen, Stinki. 😌 Vier Stationen warten auf dich.</p>
+  </div>
+
+  <div class="tiles">
+    <button class="tile" data-goto="escape" id="tile-escape">
+      <span class="emoji">🔐</span>
+      <span><span class="t-name">Der Escape Room</span>
+      <span class="t-sub">Beweise, dass du unsere Geschichte kennst</span></span>
+      <span class="check">✅</span>
+    </button>
+    <button class="tile" data-goto="frech" id="tile-frech">
+      <span class="emoji">🖱️</span>
+      <span><span class="t-name">Der freche Button</span>
+      <span class="t-sub">Eine ganz einfache Frage… eigentlich</span></span>
+      <span class="check">✅</span>
+    </button>
+    <button class="tile" data-goto="rubbel" id="tile-rubbel">
+      <span class="emoji">🎟️</span>
+      <span><span class="t-name">Rubbellose</span>
+      <span class="t-sub">9 Felder, ein paar Überraschungen</span></span>
+      <span class="check">✅</span>
+    </button>
+    <button class="tile" data-goto="geschenk" id="tile-geschenk">
+      <span class="emoji">🎁</span>
+      <span><span class="t-name">Geschenk auspacken</span>
+      <span class="t-sub">Vorsichtig, bebos. Es ist zerbrechlich. Vielleicht.</span></span>
+      <span class="check">✅</span>
+    </button>
+    <button class="tile locked" data-goto="finale" id="tile-finale">
+      <span class="emoji">💌</span>
+      <span><span class="t-name">Dein Geburtstagsgruß</span>
+      <span class="t-sub" id="finale-sub">Erst alle 4 Stationen schaffen, Maus!</span></span>
+    </button>
+  </div>
+  <p class="progress-hint" id="progress-hint"></p>
+</section>
+
+<!-- ================= ESCAPE ROOM ================= -->
+<section class="view" id="escape">
+  <button class="back" data-goto="menu">← Zurück</button>
+  <div class="station-head">
+    <h2>🔐 Der Escape Room</h2>
+    <p>Du bist eingesperrt im Raum der Erinnerungen. Nur wer unsere Geschichte kennt, kommt hier raus.</p>
+  </div>
+  <div class="locks"><span id="lock1">🔓</span><span id="lock2">🔓</span><span id="lock3">🔓</span><span id="lock4">🔓</span></div>
+
+  <div class="card er-step active" id="er-0">
+    <p class="q">Bereit, Schatzo?</p>
+    <p style="margin-bottom:18px;">Drei Fragen, ein Zahlenschloss. Bei falschen Antworten werde ich… sagen wir: ehrlich. 😇</p>
+    <button class="btn" data-er="1">Los geht's</button>
+  </div>
+
+  <div class="card er-step" id="er-1">
+    <p class="q">Frage 1: Was war unser erstes Date?</p>
+    <div class="opts" data-q="0">
+      <button class="opt" data-i="0">🍝 Essen gehen</button>
+      <button class="opt" data-i="1">🎬 Kino-Besuch</button>
+      <button class="opt" data-i="2">🎡 Kerb</button>
+    </div>
+    <p class="sass" id="sass-0"></p>
+  </div>
+
+  <div class="card er-step" id="er-2">
+    <p class="q">Frage 2: Wo haben wir uns das erste Mal getroffen?</p>
+    <div class="opts" data-q="1">
+      <button class="opt" data-i="0">🍇 Alzey Winzerfest</button>
+      <button class="opt" data-i="1">📍 Wöllstein</button>
+      <button class="opt" data-i="2">🏠 Bei mir zu Hause</button>
+    </div>
+    <p class="sass" id="sass-1"></p>
+  </div>
+
+  <div class="card er-step" id="er-3">
+    <p class="q">Frage 3: Wo war unser erster Kuss?</p>
+    <div class="opts" data-q="2">
+      <button class="opt" data-i="0">🎬 Im Kino</button>
+      <button class="opt" data-i="1">🏠 Bei dir zu Hause</button>
+      <button class="opt" data-i="2">🛝 In Wörrstadt am Spielplatz</button>
+    </div>
+    <p class="sass" id="sass-2"></p>
+  </div>
+
+  <div class="card er-step" id="er-4">
+    <p class="q">Letztes Schloss: Der Zahlencode 🔢</p>
+    <div class="code-display" id="code-display">____</div>
+    <div class="codepad" id="codepad"></div>
+    <p class="hint">Tipp: Ein Datum, das nur uns gehört. 💙 (TTMM)</p>
+    <p class="sass" id="sass-code"></p>
+  </div>
+
+  <div class="card er-step" id="er-5" style="text-align:center;">
+    <p style="font-size:3rem;">🎉</p>
+    <p class="q">Entkommen! Natürlich weißt du alles, Maus.</p>
+    <p style="margin-bottom:18px;">Hätte mich auch gewundert. Immerhin warst du dabei.</p>
+    <button class="btn" data-goto="menu">Zurück zur Übersicht</button>
+  </div>
+</section>
+
+<!-- ================= FRECHER BUTTON ================= -->
+<section class="view" id="frech">
+  <button class="back" data-goto="menu">← Zurück</button>
+  <div class="station-head">
+    <h2>🖱️ Der freche Button</h2>
+    <p>Nur eine kurze Frage, bebos:</p>
+  </div>
+  <div class="card" style="text-align:center;">
+    <p class="q">Bin ich (Dimitrije) der beste Freund der Welt?</p>
+  </div>
+  <div class="arena" id="arena">
+    <button class="btn" id="richtigBtn">Noch nicht 😌</button>
+    <button class="btn" id="jaBtn" style="background:#8a97b8;">Ja 💙</button>
+  </div>
+  <p class="arena-msg" id="arena-msg">Wähle weise…</p>
+</section>
+
+<!-- ================= RUBBELLOSE ================= -->
+<section class="view" id="rubbel">
+  <button class="back" data-goto="menu">← Zurück</button>
+  <div class="station-head">
+    <h2>🎟️ Rubbellose</h2>
+    <p>Rubbel alle 9 Felder frei – mit dem Finger oder der Maus. Es lohnt sich, Stinki. 😏</p>
+  </div>
+  <div class="rub-grid" id="rub-grid"></div>
+  <p class="rub-count" id="rub-count">0 / 9 freigerubbelt</p>
+</section>
+
+<!-- ================= GESCHENK ================= -->
+<section class="view" id="geschenk">
+  <button class="back" data-goto="menu">← Zurück</button>
+  <div class="station-head">
+    <h2>🎁 Geschenk auspacken</h2>
+    <p>Tippe auf das Geschenk. Mehrfach. Es ist gut verpackt.</p>
+  </div>
+  <div class="card">
+    <div class="gift-stage">
+      <span class="gift" id="gift" role="button" tabindex="0" aria-label="Geschenk auspacken">🎁</span>
+      <p class="gift-msg" id="gift-msg">Na los, pack mich aus!</p>
+      <div class="gift-reveal" id="gift-reveal">
+        <img src="bilder/geschenk.jpeg" alt="Wir zwei 💙">
+        <p style="margin-top:14px;font-weight:700;color:var(--blue-deep);">Das beste Geschenk hab sowieso ich bekommen. Dich. 💙</p>
+        <button class="btn" data-goto="menu" style="margin-top:16px;">Zurück zur Übersicht</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FINALE ================= -->
+<section class="view" id="finale">
+  <button class="back" data-goto="menu">← Zurück</button>
+  <div class="finale-head">
+    <p style="font-size:2.6rem;">🎂✨</p>
+    <h1 class="big">Alles Gute zum 20. Geburtstag, Emilia!</h1>
+    <p class="sub">Von deinem Stinker. Wer sonst.</p>
+  </div>
+
+  <div class="letter">
+    <p>Meine Maus,</p>
+    <p>heute wirst du 20 – und ich darf der sein, der dieses neue Jahrzehnt an deiner Seite beginnt. Ehrlich gesagt: besseres Los hätte ich nicht ziehen können.</p>
+    <p>Ich liebe deine Art zu lieben. So warm und so echt, dass sich jeder Tag mit dir anfühlt wie nach Hause kommen. Ich bewundere deinen Fleiß und deine Disziplin – wie du für alles kämpfst, was dir wichtig ist, auch wenn es anstrengend wird. Und wenn du mich mit deinen Augen ansiehst, vergesse ich regelmäßig, was ich eigentlich sagen wollte.</p>
+    <p>(Und ja, das muss hier rein: Dein Specki-Bauch und deine Beine sind und bleiben meine absoluten Lieblingsorte auf dieser Welt. 😌)</p>
+    <p>Am 14.11. werden es drei volle Jahre. Aber weißt du was? Gerade fühlt es sich gar nicht wie drei Jahre an – es fühlt sich an wie ein Anfang. Unser neues Kapitel. Und ich freue mich auf jede einzelne Seite: auf jedes „Guten Satelit" beim Essen, auf jeden „Popel im Auge", den wir zusammen weglachen, und auf alles, was wir noch gar nicht kennen.</p>
+    <p>Danke, dass du du bist, Stinki. Danke, dass du meine bist.</p>
+    <p>Ich liebe dich. Heute, morgen und in jedem Kapitel danach.</p>
+    <p class="sig">Dein Stinker – Dimitrije 💙</p>
+  </div>
+
+  <div class="finale-photo">
+    <img src="bilder/finale.jpeg" alt="Emilia und Dimitrije">
+  </div>
+</section>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- Fortschritt (überlebt Neuladen, fällt sonst auf Speicher im RAM zurück) ---------- */
+  var mem = {};
+  function save(k,v){ mem[k]=v; try{ localStorage.setItem("emilia20_"+k, v?"1":"0"); }catch(e){} }
+  function load(k){ try{ var s=localStorage.getItem("emilia20_"+k); if(s!==null) return s==="1"; }catch(e){} return !!mem[k]; }
+
+  var progress = {
+    escape: load("escape"),
+    frech: load("frech"),
+    rubbel: load("rubbel"),
+    geschenk: load("geschenk")
+  };
+
+  function markDone(station){
+    if(progress[station]) return;
+    progress[station]=true; save(station,true);
+    burst(40);
+    updateMenu();
+  }
+
+  function allDone(){ return progress.escape && progress.frech && progress.rubbel && progress.geschenk; }
+
+  function updateMenu(){
+    ["escape","frech","rubbel","geschenk"].forEach(function(s){
+      document.getElementById("tile-"+s).classList.toggle("done", progress[s]);
+    });
+    var ft = document.getElementById("tile-finale");
+    var left = 4 - ["escape","frech","rubbel","geschenk"].filter(function(s){return progress[s];}).length;
+    if(allDone()){
+      ft.classList.add("unlocked");
+      document.getElementById("finale-sub").textContent = "Freigeschaltet! Tippe hier, Maus 💙";
+      document.getElementById("progress-hint").textContent = "Alle Stationen geschafft! 🎉";
+    } else {
+      document.getElementById("progress-hint").textContent = left===4 ? "" : "Noch "+left+" Station"+(left===1?"":"en")+" bis zu deinem Gruß…";
+    }
+  }
+
+  /* ---------- Navigation ---------- */
+  function show(id){
+    document.querySelectorAll(".view").forEach(function(v){ v.classList.remove("active"); });
+    document.getElementById(id).classList.add("active");
+    window.scrollTo(0,0);
+    if(id==="finale") finaleConfetti();
+  }
+  document.querySelectorAll("[data-goto]").forEach(function(el){
+    el.addEventListener("click", function(){
+      var target = el.getAttribute("data-goto");
+      if(target==="finale" && !allDone()){
+        el.classList.add("wigglelock");
+        document.getElementById("finale-sub").textContent = "Netter Versuch, Schatzo. 😏 Erst die Stationen!";
+        return;
+      }
+      show(target);
+    });
+  });
+
+  /* ---------- Konfetti ---------- */
+  var cCanvas = document.getElementById("confetti");
+  var ctx = cCanvas.getContext("2d");
+  var parts = [];
+  var colors = ["#2b5cd9","#7fa8ff","#f5b942","#ffffff","#1c3fa0","#ffd9e8"];
+  function resize(){ cCanvas.width=innerWidth; cCanvas.height=innerHeight; }
+  addEventListener("resize", resize); resize();
+  function burst(n, spread){
+    for(var i=0;i<n;i++){
+      parts.push({
+        x: innerWidth/2 + (Math.random()-0.5)*(spread||innerWidth*0.6),
+        y: -20 - Math.random()*80,
+        vx:(Math.random()-0.5)*3,
+        vy:2+Math.random()*3,
+        s:6+Math.random()*6,
+        r:Math.random()*Math.PI,
+        vr:(Math.random()-0.5)*0.2,
+        c:colors[(Math.random()*colors.length)|0]
+      });
+    }
+  }
+  function tick(){
+    ctx.clearRect(0,0,cCanvas.width,cCanvas.height);
+    parts = parts.filter(function(p){ return p.y < cCanvas.height + 30; });
+    parts.forEach(function(p){
+      p.x+=p.vx; p.y+=p.vy; p.r+=p.vr; p.vy+=0.03;
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r);
+      ctx.fillStyle=p.c; ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s*0.6);
+      ctx.restore();
+    });
+    requestAnimationFrame(tick);
+  }
+  tick();
+  var finaleFired=false;
+  function finaleConfetti(){
+    if(finaleFired) return; finaleFired=true;
+    burst(120);
+    setTimeout(function(){burst(80);},700);
+    setTimeout(function(){burst(80);},1500);
+  }
+
+  /* ---------- Escape Room ---------- */
+  var answers=[1,0,2]; // Kino, Alzey Winzerfest, Wörrstadt Spielplatz
+  var sassWrong=[
+    ["Essen gehen?? Ernsthaft, Stinki?! 😤 Nochmal!","Die Kerb? Da warst du vielleicht – aber nicht mit MIR beim ersten Date! 😅"],
+    ["Wöllstein? Netter Versuch, Maus. Aber nein. 🙃","Bei mir zu Hause? So schnell ging das nun auch nicht, bebos! 😏"],
+    ["Im Kino? Da haben wir uns nur schüchtern angeschaut. 🙈","Bei mir zu Hause? Träum weiter, Schatzo. 😌 Nochmal!"]
+  ];
+  function wrongText(q,i){
+    var arr=sassWrong[q];
+    // Ordne der geklickten falschen Option einen Spruch zu
+    var wrongIdx=[];
+    for(var k=0;k<3;k++){ if(k!==answers[q]) wrongIdx.push(k); }
+    return arr[wrongIdx.indexOf(i)] || "Nope. Nochmal, Maus!";
+  }
+  function erStep(n){
+    document.querySelectorAll(".er-step").forEach(function(s){s.classList.remove("active");});
+    document.getElementById("er-"+n).classList.add("active");
+  }
+  document.querySelector("[data-er='1']").addEventListener("click", function(){ erStep(1); });
+  var locks=[document.getElementById("lock1"),document.getElementById("lock2"),document.getElementById("lock3"),document.getElementById("lock4")];
+  document.querySelectorAll(".opts").forEach(function(box){
+    var q=parseInt(box.getAttribute("data-q"),10);
+    box.querySelectorAll(".opt").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var i=parseInt(btn.getAttribute("data-i"),10);
+        var sassEl=document.getElementById("sass-"+q);
+        if(i===answers[q]){
+          btn.classList.add("right");
+          sassEl.style.color="#1c7a3a";
+          sassEl.textContent="Richtig! 💙";
+          locks[q].textContent="🔒"; locks[q].classList.add("open");
+          setTimeout(function(){ erStep(q+2); }, 900);
+        } else {
+          btn.classList.add("wrong");
+          sassEl.style.color="#c05555";
+          sassEl.textContent=wrongText(q,i);
+          setTimeout(function(){btn.classList.remove("wrong");},600);
+        }
+      });
+    });
+  });
+
+  // Zahlenschloss
+  var code="";
+  var codeDisplay=document.getElementById("code-display");
+  var pad=document.getElementById("codepad");
+  "123456789⌫0✓".split("").forEach(function(ch){
+    var b=document.createElement("button");
+    b.type="button"; b.textContent=ch;
+    b.addEventListener("click", function(){
+      var sassC=document.getElementById("sass-code");
+      if(ch==="⌫"){ code=code.slice(0,-1); }
+      else if(ch==="✓"){
+        if(code==="1411"){
+          sassC.style.color="#1c7a3a"; sassC.textContent="Unser Tag. Natürlich. 💙";
+          locks[3].textContent="🔒"; locks[3].classList.add("open");
+          markDone("escape");
+          setTimeout(function(){ erStep(5); },900);
+        } else {
+          sassC.style.color="#c05555";
+          sassC.textContent = code.length<4 ? "Da fehlen noch Ziffern, Maus!" : "Falsch! Denk an UNSEREN Tag… 😏";
+          codeDisplay.classList.add("wrong");
+          if(code.length>=4) code="";
+        }
+      }
+      else if(code.length<4){ code+=ch; }
+      codeDisplay.textContent = code.padEnd(4,"_");
+    });
+    pad.appendChild(b);
+  });
+  codeDisplay.textContent="____";
+
+  /* ---------- Frecher Button ---------- */
+  var ja=document.getElementById("jaBtn");
+  var richtig=document.getElementById("richtigBtn");
+  var arena=document.getElementById("arena");
+  var arenaMsg=document.getElementById("arena-msg");
+  var tries=0;
+  var fleeTexts=["Ja 💙","Ups!","Zu langsam!","Hihi 😝","So einfach nicht!","Netter Versuch!","Niemals!","Ok fast…"];
+  function flee(){
+    tries++;
+    var aw=arena.clientWidth, ah=arena.clientHeight;
+    var bw=ja.offsetWidth, bh=ja.offsetHeight;
+    ja.style.left=Math.max(4,Math.random()*(aw-bw-8))+"px";
+    ja.style.top=Math.max(4,Math.random()*(ah-bh-8))+"px";
+    var scale=Math.max(0.35,1-tries*0.09);
+    ja.style.transform="scale("+scale+")";
+    richtig.style.transform="scale("+Math.min(1.7,1+tries*0.09)+")";
+    ja.textContent=fleeTexts[Math.min(tries-1,fleeTexts.length-1)];
+    if(tries===3) arenaMsg.textContent="Der Ja-Button scheint da anderer Meinung zu sein… 🤔";
+    if(tries===6) arenaMsg.textContent="Gib's auf, bebos. Es gibt nur eine ehrliche Antwort. 😌";
+    if(tries>=9){ arenaMsg.textContent="Na gut. Der Ja-Button ist jetzt beleidigt und winzig."; }
+  }
+  ["pointerenter","pointerdown","touchstart"].forEach(function(ev){
+    ja.addEventListener(ev, function(e){ e.preventDefault(); flee(); }, {passive:false});
+  });
+  ja.addEventListener("click", function(e){ e.preventDefault(); flee(); });
+  richtig.addEventListener("click", function(){
+    arenaMsg.textContent="Autsch. Aber ehrlich. 😅 Ich arbeite dran, Maus – versprochen. 💙";
+    burst(50);
+    markDone("frech");
+    ja.style.display="none";
+    richtig.textContent="Noch nicht 😌✔️";
+  });
+
+  /* ---------- Rubbellose ---------- */
+  var rubItems=[
+    {type:"img", src:"bilder/rubbel1.jpeg"},
+    {type:"img", src:"bilder/rubbel2.jpeg"},
+    {type:"voucher", icon:"🥐", text:"1× Frühstück ans Bett"},
+    {type:"img", src:"bilder/rubbel4.jpeg"},
+    {type:"voucher", icon:"💆‍♀️", text:"1× Massage ohne Meckern"},
+    {type:"voucher", icon:"🎳", text:"1× Bowling"},
+    {type:"img", src:"bilder/rubbel7.jpeg"},
+    {type:"img", src:"bilder/rubbel8.jpeg"},
+    {type:"img", src:"bilder/rubbel9.jpeg"}
+  ];
+  var rubGrid=document.getElementById("rub-grid");
+  var revealedCount=0;
+  var rubCountEl=document.getElementById("rub-count");
+
+  rubItems.forEach(function(item, idx){
+    var card=document.createElement("div");
+    card.className="rub-card";
+    var content=document.createElement("div");
+    content.className="content";
+    if(item.type==="img"){
+      var img=document.createElement("img");
+      img.src=item.src; img.alt="Erinnerung "+(idx+1);
+      content.appendChild(img);
+    } else {
+      var v=document.createElement("div");
+      v.className="voucher";
+      v.innerHTML='<span class="v-icon">'+item.icon+'</span><span>GUTSCHEIN</span><strong>'+item.text+'</strong>';
+      content.appendChild(v);
+    }
+    var canvas=document.createElement("canvas");
+    card.appendChild(content);
+    card.appendChild(canvas);
+    rubGrid.appendChild(card);
+    initScratch(card, canvas);
+  });
+
+  function initScratch(card, canvas){
+    var cctx=canvas.getContext("2d");
+    var revealed=false;
+    function paint(){
+      var r=card.getBoundingClientRect();
+      canvas.width=Math.max(1,Math.round(r.width));
+      canvas.height=Math.max(1,Math.round(r.height));
+      var g=cctx.createLinearGradient(0,0,canvas.width,canvas.height);
+      g.addColorStop(0,"#9db6e8"); g.addColorStop(0.5,"#c3d4f5"); g.addColorStop(1,"#8aa5dd");
+      cctx.fillStyle=g;
+      cctx.fillRect(0,0,canvas.width,canvas.height);
+      cctx.fillStyle="rgba(255,255,255,0.85)";
+      cctx.font="bold "+(canvas.width*0.28)+"px sans-serif";
+      cctx.textAlign="center"; cctx.textBaseline="middle";
+      cctx.fillText("?", canvas.width/2, canvas.height/2);
+    }
+    // erst zeichnen, wenn sichtbar (View kann noch display:none sein)
+    var painted=false;
+    function ensurePainted(){
+      if(!painted && card.clientWidth>0){ paint(); painted=true; }
+    }
+    document.querySelector("[data-goto='rubbel']").addEventListener("click", function(){
+      setTimeout(ensurePainted, 60);
+    });
+    ensurePainted();
+
+    var scratching=false;
+    function scratchAt(x,y){
+      cctx.globalCompositeOperation="destination-out";
+      cctx.beginPath();
+      cctx.arc(x,y,Math.max(14,canvas.width*0.11),0,Math.PI*2);
+      cctx.fill();
+      cctx.globalCompositeOperation="source-over";
+    }
+    function pos(e){
+      var r=canvas.getBoundingClientRect();
+      var t=(e.touches&&e.touches[0])||e;
+      return {x:t.clientX-r.left, y:t.clientY-r.top};
+    }
+    function checkReveal(){
+      if(revealed) return;
+      try{
+        var d=cctx.getImageData(0,0,canvas.width,canvas.height).data;
+        var clear=0, total=d.length/4;
+        for(var i=3;i<d.length;i+=4*6){ if(d[i]<40) clear++; }
+        if(clear/(total/6) > 0.45){
+          revealed=true;
+          card.classList.add("revealed");
+          revealedCount++;
+          rubCountEl.textContent=revealedCount+" / 9 freigerubbelt";
+          if(revealedCount===9){
+            rubCountEl.textContent="Alle 9 freigerubbelt! 🎉 (Die Gutscheine sind übrigens rechtlich bindend.)";
+            markDone("rubbel");
+          }
+        }
+      }catch(e){}
+    }
+    canvas.addEventListener("pointerdown", function(e){ ensurePainted(); scratching=true; canvas.setPointerCapture(e.pointerId); var p=pos(e); scratchAt(p.x,p.y); e.preventDefault(); });
+    canvas.addEventListener("pointermove", function(e){ if(!scratching) return; var p=pos(e); scratchAt(p.x,p.y); e.preventDefault(); });
+    canvas.addEventListener("pointerup", function(){ scratching=false; checkReveal(); });
+    canvas.addEventListener("pointercancel", function(){ scratching=false; checkReveal(); });
+    canvas.addEventListener("pointerleave", function(){ if(scratching){ scratching=false; checkReveal(); } });
+  }
+
+  /* ---------- Geschenk ---------- */
+  var gift=document.getElementById("gift");
+  var giftMsg=document.getElementById("gift-msg");
+  var giftStage=0;
+  var giftSteps=[
+    {emoji:"🎁", msg:"Hm, da ist eine Schleife. Zieh mal dran!"},
+    {emoji:"🎁", msg:"Fester, Maus! Die sitzt gut. 💪"},
+    {emoji:"📦", msg:"Schleife ab! Jetzt der Deckel…"},
+    {emoji:"📦", msg:"Es klemmt ein bisschen. Geduld, Schatzo…"},
+    {emoji:"📦", msg:"Trommelwirbel… 🥁🥁🥁"}
+  ];
+  function giftClick(){
+    if(giftStage < giftSteps.length){
+      var s=giftSteps[giftStage];
+      gift.textContent=s.emoji;
+      giftMsg.textContent=s.msg;
+      gift.classList.remove("wiggle");
+      void gift.offsetWidth;
+      gift.classList.add("wiggle");
+      giftStage++;
+    } else {
+      gift.style.display="none";
+      giftMsg.textContent="Tadaa! 🎉";
+      document.getElementById("gift-reveal").classList.add("show");
+      burst(60);
+      markDone("geschenk");
+    }
+  }
+  gift.addEventListener("click", giftClick);
+  gift.addEventListener("keydown", function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); giftClick(); } });
+
+  updateMenu();
+})();
+</script>
+</body>
+</html>
